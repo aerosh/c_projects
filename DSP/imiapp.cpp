@@ -16,7 +16,7 @@ static bool imiAppBuildPacket(ImiApp& app, Packet& packet);
 static bool imiAppGetFromUser(ImiApp& app, Packet& packet);
 static bool imiAppGeneratePacket(ImiApp& app, Packet& packet);
 
-//расчет метки времени, отстоящей от заданной на указанный интервал
+//я─п╟я│я┤п╣я┌ п╪п╣я┌п╨п╦ п╡я─п╣п╪п╣п╫п╦, п╬я┌я│я┌п╬я▐я┴п╣п╧ п╬я┌ п╥п╟п╢п╟п╫п╫п╬п╧ п╫п╟ я┐п╨п╟п╥п╟п╫п╫я▀п╧ п╦п╫я┌п╣я─п╡п╟п╩
 struct timespec add(struct timespec left, time_t tv_sec, long tv_nsec) {
    
    left.tv_sec += tv_sec;
@@ -30,13 +30,13 @@ struct timespec add(struct timespec left, time_t tv_sec, long tv_nsec) {
 
 int imiAppRun(ImiApp& app) {
    
-   //формирование первой метки времени для генерации пакета
+   //я└п╬я─п╪п╦я─п╬п╡п╟п╫п╦п╣ п©п╣я─п╡п╬п╧ п╪п╣я┌п╨п╦ п╡я─п╣п╪п╣п╫п╦ п╢п╩я▐ пЁп╣п╫п╣я─п╟я├п╦п╦ п©п╟п╨п╣я┌п╟
    clock_gettime(CLOCK_MONOTONIC,&app.actTime);
    app.diagTime = app.actTime;
    
    Packet packet;
    
-   //формирование и отправка пакета с параметрами обработки 
+   //я└п╬я─п╪п╦я─п╬п╡п╟п╫п╦п╣ п╦ п╬я┌п©я─п╟п╡п╨п╟ п©п╟п╨п╣я┌п╟ я│ п©п╟я─п╟п╪п╣я┌я─п╟п╪п╦ п╬п╠я─п╟п╠п╬я┌п╨п╦ 
    ConfigPacketBody* cfgBody = (ConfigPacketBody*)(packet.body);
    cfgBody->coeff = app.procConfig.coeff;
    packet.header.message = MESSAGE_PROCCONFIG;
@@ -62,7 +62,7 @@ int imiAppRun(ImiApp& app) {
    write(app.writeFd,&packet.header,sizeof(packet.header));
    write(app.writeFd,packet.body,packet.header.size+sizeof(unsigned));
    
-   //формирование и отправка ошибочного пакета 
+   //я└п╬я─п╪п╦я─п╬п╡п╟п╫п╦п╣ п╦ п╬я┌п©я─п╟п╡п╨п╟ п╬я┬п╦п╠п╬я┤п╫п╬пЁп╬ п©п╟п╨п╣я┌п╟ 
    if ( app.badPacket ) {
       packet.header.message = MESSAGE_OUTPUTPACKET;
       packet.header.size = 0;
@@ -76,12 +76,12 @@ int imiAppRun(ImiApp& app) {
    }
    
    while ( 1 ) {
-      //формирование пакета
+      //я└п╬я─п╪п╦я─п╬п╡п╟п╫п╦п╣ п©п╟п╨п╣я┌п╟
       bool needContinue = imiAppBuildPacket(app,packet);
       if ( !needContinue )
          break;
       
-      //запись пакета в канал обмена
+      //п╥п╟п©п╦я│я▄ п©п╟п╨п╣я┌п╟ п╡ п╨п╟п╫п╟п╩ п╬п╠п╪п╣п╫п╟
       write(app.writeFd,&packet.header,sizeof(packet.header));
       write(app.writeFd,packet.body,packet.header.size+sizeof(unsigned));
    }
@@ -106,7 +106,7 @@ bool imiAppGetFromUser(ImiApp& app, Packet& packet) {
    for(unsigned i = 0; i<body->count; ++i)
       cin >> body->data[i].level;
    
-   //формирование размера пакета
+   //я└п╬я─п╪п╦я─п╬п╡п╟п╫п╦п╣ я─п╟п╥п╪п╣я─п╟ п©п╟п╨п╣я┌п╟
    packet.header.size = body->count*sizeof(InputPacketItem) + sizeof(body->count);
    packet.header.message = MESSAGE_INPUTPACKET;
    packet.header.source = NODE_IMITATOR;
@@ -124,8 +124,8 @@ bool imiAppGeneratePacket(ImiApp& app, Packet& packet) {
    
    static struct timespec imiTime;
    
-   /* определить какое событие произойдет раньше
-    * и ожидать время его наступления
+   /* п╬п©я─п╣п╢п╣п╩п╦я┌я▄ п╨п╟п╨п╬п╣ я│п╬п╠я▀я┌п╦п╣ п©я─п╬п╦п╥п╬п╧п╢п╣я┌ я─п╟п╫я▄я┬п╣
+    * п╦ п╬п╤п╦п╢п╟я┌я▄ п╡я─п╣п╪я▐ п╣пЁп╬ п╫п╟я│я┌я┐п©п╩п╣п╫п╦я▐
     */
    if ( (app.diagTime.tv_sec < app.actTime.tv_sec) ||
       (app.diagTime.tv_sec == app.actTime.tv_sec) && 
@@ -133,8 +133,8 @@ bool imiAppGeneratePacket(ImiApp& app, Packet& packet) {
       
       clock_nanosleep(CLOCK_MONOTONIC,TIMER_ABSTIME,&app.diagTime,NULL);
       app.diagTime = add(app.diagTime,2,0); 
-      //сформировать и отправить диагностический пакет
-      packet.header.size = 0; /*в реальности пакет содержит описание состояния каналов*/
+      //я│я└п╬я─п╪п╦я─п╬п╡п╟я┌я▄ п╦ п╬я┌п©я─п╟п╡п╦я┌я▄ п╢п╦п╟пЁп╫п╬я│я┌п╦я┤п╣я│п╨п╦п╧ п©п╟п╨п╣я┌
+      packet.header.size = 0; /*п╡ я─п╣п╟п╩я▄п╫п╬я│я┌п╦ п©п╟п╨п╣я┌ я│п╬п╢п╣я─п╤п╦я┌ п╬п©п╦я│п╟п╫п╦п╣ я│п╬я│я┌п╬я▐п╫п╦я▐ п╨п╟п╫п╟п╩п╬п╡*/
       packet.header.message = MESSAGE_INPUTDIAG;
       packet.header.source = NODE_IMITATOR;
       packet.header.destination = NODE_CONSUMER;
@@ -144,23 +144,23 @@ bool imiAppGeneratePacket(ImiApp& app, Packet& packet) {
       return true;
    }
 
-   //ожидание момента времени
+   //п╬п╤п╦п╢п╟п╫п╦п╣ п╪п╬п╪п╣п╫я┌п╟ п╡я─п╣п╪п╣п╫п╦
    int ret = clock_nanosleep(CLOCK_MONOTONIC,TIMER_ABSTIME,&app.actTime,NULL);
    
-   //расчет следующей метки времени
+   //я─п╟я│я┤п╣я┌ я│п╩п╣п╢я┐я▌я┴п╣п╧ п╪п╣я┌п╨п╦ п╡я─п╣п╪п╣п╫п╦
    long jitter = long(rand() % (2*app.generationJitterLevel+1)) - app.generationJitterLevel;
    long timeDelay = 100000000 + jitter * 1000000;
    if ( timeDelay < 0 )
       timeDelay = 0;
    app.actTime = add(app.actTime,0,timeDelay);
    
-   //формирование пакета
+   //я└п╬я─п╪п╦я─п╬п╡п╟п╫п╦п╣ п©п╟п╨п╣я┌п╟
    InputPacketBody* body = (InputPacketBody*)packet.body;
    body->count = app.packetSize;
    for(unsigned i = 0; i<body->count; ++i )
       body->data[i].level =  rand() % app.maxLevel;
    
-   //формирование размера пакета
+   //я└п╬я─п╪п╦я─п╬п╡п╟п╫п╦п╣ я─п╟п╥п╪п╣я─п╟ п©п╟п╨п╣я┌п╟
    packet.header.size = body->count*sizeof(InputPacketItem) + sizeof(body->count);
    packet.header.message = MESSAGE_INPUTPACKET;
    packet.header.source = NODE_IMITATOR;
@@ -168,7 +168,7 @@ bool imiAppGeneratePacket(ImiApp& app, Packet& packet) {
    packetSetupHeaderCrc(packet);
    packetSetupBodyCrc(packet);
    
-   //изменение количества генерации пакетов
+   //п╦п╥п╪п╣п╫п╣п╫п╦п╣ п╨п╬п╩п╦я┤п╣я│я┌п╡п╟ пЁп╣п╫п╣я─п╟я├п╦п╦ п©п╟п╨п╣я┌п╬п╡
    if( app.packetCount >0 )
       --app.packetCount;
    return true;

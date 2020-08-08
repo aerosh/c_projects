@@ -18,24 +18,24 @@ using namespace std;
 static bool procAppReceivePacket(ProcApp& app, Packet& packet);
 static void procAppProcessing(ProcApp& app, Packet& input, Packet& output);
 static void procAppSendPacket(ProcApp& app, Packet& packet);
-//обработка пакета с конфигурационными параметрами
+//п╬п╠я─п╟п╠п╬я┌п╨п╟ п©п╟п╨п╣я┌п╟ я│ п╨п╬п╫я└п╦пЁя┐я─п╟я├п╦п╬п╫п╫я▀п╪п╦ п©п╟я─п╟п╪п╣я┌я─п╟п╪п╦
 static void procAppConfig(ProcApp& app, Packet& packet);
 
 static void processingImpl(const Packet& input, Packet& output, const ProcConfig& config);
 
-//функции, исполняемые потоками
+//я└я┐п╫п╨я├п╦п╦, п╦я│п©п╬п╩п╫я▐п╣п╪я▀п╣ п©п╬я┌п╬п╨п╟п╪п╦
 static void* processingExecute(void* arg);
 static void* inputExecute(void* arg);
 static void* outputExecute(void*);
 
-//функции-обработчики для вызова из диспетчера
+//я└я┐п╫п╨я├п╦п╦-п╬п╠я─п╟п╠п╬я┌я┤п╦п╨п╦ п╢п╩я▐ п╡я▀п╥п╬п╡п╟ п╦п╥ п╢п╦я│п©п╣я┌я┤п╣я─п╟
 static void inputHandler(Packet* packet, void* clientData);
 static void procConfigHandler(Packet* packet, void* clientData);
 
 static void sendError(Packet* packet, PacketContainer& oc, unsigned source);
 static void sendDiagPacket(unsigned failCount, PacketContainer& oc, unsigned destination, unsigned source);
 
-//структурные типы данных для передачи параметров в функцию потока
+//я│я┌я─я┐п╨я┌я┐я─п╫я▀п╣ я┌п╦п©я▀ п╢п╟п╫п╫я▀я┘ п╢п╩я▐ п©п╣я─п╣п╢п╟я┤п╦ п©п╟я─п╟п╪п╣я┌я─п╬п╡ п╡ я└я┐п╫п╨я├п╦я▌ п©п╬я┌п╬п╨п╟
 struct InputThreadData {
    ProcApp* app;
    PacketContainer* ic;
@@ -59,14 +59,14 @@ int procAppRun(ProcApp& app) {
    pcInit(&app.ic);
    pcInit(&app.oc);
    
-   //инициализация диспетчера
+   //п╦п╫п╦я├п╦п╟п╩п╦п╥п╟я├п╦я▐ п╢п╦я│п©п╣я┌я┤п╣я─п╟
    dispInit(app.dispatcher);
    dispAddHandler(app.dispatcher,MESSAGE_INPUTPACKET,inputHandler,&app);
    dispAddHandler(app.dispatcher,MESSAGE_PROCCONFIG,procConfigHandler,&app);
 
    routerInit(app.router,NODE_PROCESSING,&app.oc);
    
-   //заполнение структур-параметров функций потоков
+   //п╥п╟п©п╬п╩п╫п╣п╫п╦п╣ я│я┌я─я┐п╨я┌я┐я─-п©п╟я─п╟п╪п╣я┌я─п╬п╡ я└я┐п╫п╨я├п╦п╧ п©п╬я┌п╬п╨п╬п╡
    InputThreadData itData;
    itData.app = &app;
    itData.ic = &app.ic;
@@ -78,22 +78,22 @@ int procAppRun(ProcApp& app) {
    otData.app = &app;
    otData.oc = &app.oc;
 
-   //объявление дескрипторов потоков
+   //п╬п╠я┼я▐п╡п╩п╣п╫п╦п╣ п╢п╣я│п╨я─п╦п©я┌п╬я─п╬п╡ п©п╬я┌п╬п╨п╬п╡
    pthread_t inputThread;
    pthread_t processingThread;
    pthread_t outputThread;
    
-   //порождение потоков управления
+   //п©п╬я─п╬п╤п╢п╣п╫п╦п╣ п©п╬я┌п╬п╨п╬п╡ я┐п©я─п╟п╡п╩п╣п╫п╦я▐
    pthread_create(&inputThread,NULL,inputExecute,&itData);
    pthread_create(&processingThread,NULL,processingExecute,&ptData);
    pthread_create(&outputThread,NULL,outputExecute,&otData);
 
-   //ожидание завершения потоков
+   //п╬п╤п╦п╢п╟п╫п╦п╣ п╥п╟п╡п╣я─я┬п╣п╫п╦я▐ п©п╬я┌п╬п╨п╬п╡
    pthread_join(inputThread,0);
    pthread_join(processingThread,0);
    pthread_join(outputThread,0);
    
-   //освобождение ресурсов буферов
+   //п╬я│п╡п╬п╠п╬п╤п╢п╣п╫п╦п╣ я─п╣я│я┐я─я│п╬п╡ п╠я┐я└п╣я─п╬п╡
    pcDestroy(&app.oc);
    pcDestroy(&app.ic);
    return 0;
@@ -102,50 +102,50 @@ int procAppRun(ProcApp& app) {
 static bool procAppReceivePacket(ProcApp& app, Packet& packet) {
    
    while ( true ) {
-      //прием заголовка пакета
+      //п©я─п╦п╣п╪ п╥п╟пЁп╬п╩п╬п╡п╨п╟ п©п╟п╨п╣я┌п╟
       int ret = read(app.readFd,&packet.header,sizeof(packet.header));
       if ( ret == 0 || ret == -1 )
          return false;
       
       /*
-       * проверка контрольной суммы заголовка и 
-       * "обнаружение" начала пакета при ее нарушении
+       * п©я─п╬п╡п╣я─п╨п╟ п╨п╬п╫я┌я─п╬п╩я▄п╫п╬п╧ я│я┐п╪п╪я▀ п╥п╟пЁп╬п╩п╬п╡п╨п╟ п╦ 
+       * "п╬п╠п╫п╟я─я┐п╤п╣п╫п╦п╣" п╫п╟я┤п╟п╩п╟ п©п╟п╨п╣я┌п╟ п©я─п╦ п╣п╣ п╫п╟я─я┐я┬п╣п╫п╦п╦
        */
       unsigned headerWordsCount = sizeof(packet.header)/sizeof(unsigned);
       unsigned* headerAddress = (unsigned*) &packet.header;
       bool failedHeader = false;
       while ( true ) {
-         //проверка совпадения контрольной суммы заголовка
+         //п©я─п╬п╡п╣я─п╨п╟ я│п╬п╡п©п╟п╢п╣п╫п╦я▐ п╨п╬п╫я┌я─п╬п╩я▄п╫п╬п╧ я│я┐п╪п╪я▀ п╥п╟пЁп╬п╩п╬п╡п╨п╟
          if ( packetTestHeaderCrc(packet) )
             break;
          
-         //учесть пакет в статистике
+         //я┐я┤п╣я│я┌я▄ п©п╟п╨п╣я┌ п╡ я│я┌п╟я┌п╦я│я┌п╦п╨п╣
          if ( !failedHeader ) 
             ++app.failPacketsCount;
          failedHeader = true;
          
-         //сместить на 1 слово для поиска заголовка пакета
+         //я│п╪п╣я│я┌п╦я┌я▄ п╫п╟ 1 я│п╩п╬п╡п╬ п╢п╩я▐ п©п╬п╦я│п╨п╟ п╥п╟пЁп╬п╩п╬п╡п╨п╟ п©п╟п╨п╣я┌п╟
          for( unsigned i = 0; i<headerWordsCount; ++i )
             headerAddress[i] = headerAddress[i+1];
          
-         //дочитать 1 слово из канала
+         //п╢п╬я┤п╦я┌п╟я┌я▄ 1 я│п╩п╬п╡п╬ п╦п╥ п╨п╟п╫п╟п╩п╟
          int ret = read(app.readFd,headerAddress+headerWordsCount-1,sizeof(unsigned));
          if ( ret == 0 || ret == -1 )
             return false;
          
       }
       
-      //прием тела пакета
+      //п©я─п╦п╣п╪ я┌п╣п╩п╟ п©п╟п╨п╣я┌п╟
       ret = read(app.readFd,packet.body,packet.header.size+sizeof(unsigned));
       if ( ret == 0 || ret == -1 )
          return false;
       
-      //проверка совпадения контрольной суммы тела
+      //п©я─п╬п╡п╣я─п╨п╟ я│п╬п╡п©п╟п╢п╣п╫п╦я▐ п╨п╬п╫я┌я─п╬п╩я▄п╫п╬п╧ я│я┐п╪п╪я▀ я┌п╣п╩п╟
       if ( packetTestBodyCrc(packet) )
          break;
    
       ++app.failPacketsCount;
-      //игнорируем сбойный пакет
+      //п╦пЁп╫п╬я─п╦я─я┐п╣п╪ я│п╠п╬п╧п╫я▀п╧ п©п╟п╨п╣я┌
       
    }
    return true;
@@ -221,7 +221,7 @@ static void* processingExecute(void* arg) {
    unsigned oldFailPacketsCount = 0;
    while ( 1 ) {
       
-      //обнаружение приема нового сбойного пакета и информирование о событии
+      //п╬п╠п╫п╟я─я┐п╤п╣п╫п╦п╣ п©я─п╦п╣п╪п╟ п╫п╬п╡п╬пЁп╬ я│п╠п╬п╧п╫п╬пЁп╬ п©п╟п╨п╣я┌п╟ п╦ п╦п╫я└п╬я─п╪п╦я─п╬п╡п╟п╫п╦п╣ п╬ я│п╬п╠я▀я┌п╦п╦
       unsigned nowFailPacketsCount = params->app->failPacketsCount;
       if ( oldFailPacketsCount != nowFailPacketsCount ) {         
          sendDiagPacket(nowFailPacketsCount, params->app->oc, NODE_CONSUMER, router->nodeName);
@@ -230,10 +230,10 @@ static void* processingExecute(void* arg) {
       
       Packet* input = pcStartReadPacket(ic);
       
-      //передать на анализ маршрутизатору
+      //п©п╣я─п╣п╢п╟я┌я▄ п╫п╟ п╟п╫п╟п╩п╦п╥ п╪п╟я─я┬я─я┐я┌п╦п╥п╟я┌п╬я─я┐
       bool needDispatch = routerAction(*router,input);
       if ( needDispatch ) {
-         //передать на обработку диспетчеру
+         //п©п╣я─п╣п╢п╟я┌я▄ п╫п╟ п╬п╠я─п╟п╠п╬я┌п╨я┐ п╢п╦я│п©п╣я┌я┤п╣я─я┐
          int ret = dispProcess(*dispatcher,input);
          if ( ret == -1 ) {
             sendError(input,params->app->oc, router->nodeName);
@@ -300,14 +300,14 @@ static void sendError(Packet* packet, PacketContainer& oc, unsigned source) {
    
    Packet* output = pcStartWritePacket(&oc);
    
-   //формирование заголовка
+   //я└п╬я─п╪п╦я─п╬п╡п╟п╫п╦п╣ п╥п╟пЁп╬п╩п╬п╡п╨п╟
    output->header.size = packet->header.size + sizeof(packet->header) + sizeof(unsigned);
    output->header.message = MESSAGE_BADPACKET;
    output->header.source = source;
    output->header.destination = NODE_CONSUMER;
    packetSetupHeaderCrc(*output);
    
-   //копирование плохого пакета 
+   //п╨п╬п©п╦я─п╬п╡п╟п╫п╦п╣ п©п╩п╬я┘п╬пЁп╬ п©п╟п╨п╣я┌п╟ 
    memcpy(output->body,packet,output->header.size);
    packetSetupBodyCrc(*output);
    
@@ -319,11 +319,11 @@ static void sendDiagPacket(unsigned failCount, PacketContainer& oc, unsigned des
    
    Packet* output = pcStartWritePacket(&oc);
 
-   //формирование тела сообщения
+   //я└п╬я─п╪п╦я─п╬п╡п╟п╫п╦п╣ я┌п╣п╩п╟ я│п╬п╬п╠я┴п╣п╫п╦я▐
    DiagPacketBody* body = (DiagPacketBody*)(output->body);
    body->failPacketsCount = failCount;
    
-   //формирование заголовка
+   //я└п╬я─п╪п╦я─п╬п╡п╟п╫п╦п╣ п╥п╟пЁп╬п╩п╬п╡п╨п╟
    output->header.size = sizeof(DiagPacketBody);
    output->header.message = MESSAGE_NODEDIAG;
    output->header.source = source;

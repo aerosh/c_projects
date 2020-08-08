@@ -7,9 +7,9 @@ struct PacketHeader
 {
     unsigned message;
     unsigned size;
-    unsigned source;  //источник пакета
-    unsigned destination;  //получатель пакета
-    unsigned crc; //контрольная сумма
+    unsigned source;  //п╦я│я┌п╬я┤п╫п╦п╨ п©п╟п╨п╣я┌п╟
+    unsigned destination;  //п©п╬п╩я┐я┤п╟я┌п╣п╩я▄ п©п╟п╨п╣я┌п╟
+    unsigned crc; //п╨п╬п╫я┌я─п╬п╩я▄п╫п╟я▐ я│я┐п╪п╪п╟
 };
 
 struct Packet

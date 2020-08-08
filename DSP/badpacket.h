@@ -5,7 +5,7 @@
 
 struct BadPacketBody
 {
-    Packet packet; //недопустимый пакет
+    Packet packet; //п╫п╣п╢п╬п©я┐я│я┌п╦п╪я▀п╧ п©п╟п╨п╣я┌
 };
 
 #endif

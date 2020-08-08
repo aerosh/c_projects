@@ -1,11 +1,11 @@
 #ifndef messageid_h
 #define messageid_h
 
-//сообщения для узла обработки
+//я│п╬п╬п╠я┴п╣п╫п╦я▐ п╢п╩я▐ я┐п╥п╩п╟ п╬п╠я─п╟п╠п╬я┌п╨п╦
 #define MESSAGE_INPUTPACKET 1
 #define MESSAGE_PROCCONFIG 3
 
-//сообщения для потребителя результатов обработки
+//я│п╬п╬п╠я┴п╣п╫п╦я▐ п╢п╩я▐ п©п╬я┌я─п╣п╠п╦я┌п╣п╩я▐ я─п╣п╥я┐п╩я▄я┌п╟я┌п╬п╡ п╬п╠я─п╟п╠п╬я┌п╨п╦
 #define MESSAGE_OUTPUTPACKET 2
 #define MESSAGE_BADPACKET 4
 #define MESSAGE_INPUTDIAG 32

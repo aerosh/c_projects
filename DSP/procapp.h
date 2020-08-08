@@ -12,12 +12,12 @@ struct ProcApp
    ProcConfig procConfig;
    int readFd;
    int consumerFd;
-   unsigned procDelay; //задержка для имитации обработки указанной длительности
-   Dispatcher dispatcher; //диспетчер пакетов
-   PacketContainer ic; //кольцевой буфер приема
-   PacketContainer oc; //кольцевой буфер выдачи
-   Router router; //маршрутизатор пакетов
-   volatile unsigned failPacketsCount; //количество сбойных пакетов
+   unsigned procDelay; //п╥п╟п╢п╣я─п╤п╨п╟ п╢п╩я▐ п╦п╪п╦я┌п╟я├п╦п╦ п╬п╠я─п╟п╠п╬я┌п╨п╦ я┐п╨п╟п╥п╟п╫п╫п╬п╧ п╢п╩п╦я┌п╣п╩я▄п╫п╬я│я┌п╦
+   Dispatcher dispatcher; //п╢п╦я│п©п╣я┌я┤п╣я─ п©п╟п╨п╣я┌п╬п╡
+   PacketContainer ic; //п╨п╬п╩я▄я├п╣п╡п╬п╧ п╠я┐я└п╣я─ п©я─п╦п╣п╪п╟
+   PacketContainer oc; //п╨п╬п╩я▄я├п╣п╡п╬п╧ п╠я┐я└п╣я─ п╡я▀п╢п╟я┤п╦
+   Router router; //п╪п╟я─я┬я─я┐я┌п╦п╥п╟я┌п╬я─ п©п╟п╨п╣я┌п╬п╡
+   volatile unsigned failPacketsCount; //п╨п╬п╩п╦я┤п╣я│я┌п╡п╬ я│п╠п╬п╧п╫я▀я┘ п©п╟п╨п╣я┌п╬п╡
 };
 
 int procAppRun(ProcApp& app);

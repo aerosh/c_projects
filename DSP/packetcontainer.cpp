@@ -17,11 +17,11 @@ void pcDestroy(PacketContainer* pc)
 
 Packet* pcStartReadPacket(PacketContainer* pc) {
    
-   //ÏÖÉÄÁÅÍ ÇÏÔÏ×ÎÏÓÔÉ ÐÁËÅÔÁ
+   //Ð¾Ð¶Ð¸Ð´Ð°ÐµÐ¼ Ð³Ð¾Ñ‚Ð¾Ð²Ð½Ð¾ÑÑ‚Ð¸ Ð¿Ð°ÐºÐµÑ‚Ð°
    sem_wait(&pc->canRead);
    
    Packet* ret = pc->data + pc->readIndex;
-   //ÐÅÒÅËÌÀÞÉÔØ ÂÕÆÅÒ
+   //Ð¿ÐµÑ€ÐµÐºÐ»ÑŽÑ‡Ð¸Ñ‚ÑŒ Ð±ÑƒÑ„ÐµÑ€
    pc->readIndex++;
    if ( pc->readIndex == PacketContainer::BufferSize )
       pc->readIndex = 0;
@@ -31,21 +31,21 @@ Packet* pcStartReadPacket(PacketContainer* pc) {
 
 void pcFinishReadPacket(PacketContainer* pc) {
    
-   //ÏÂÌÁÓÔØ ÐÁÍÑÔÉ ÓÔÁÌÁ ÄÏÓÔÕÐÎÏÊ ÄÌÑ ÚÁÐÉÓÉ ÏÞÅÒÅÄÎÏÇÏ ÐÁËÅÔÁ
+   //Ð¾Ð±Ð»Ð°ÑÑ‚ÑŒ Ð¿Ð°Ð¼ÑÑ‚Ð¸ ÑÑ‚Ð°Ð»Ð° Ð´Ð¾ÑÑ‚ÑƒÐ¿Ð½Ð¾Ð¹ Ð´Ð»Ñ Ð·Ð°Ð¿Ð¸ÑÐ¸ Ð¾Ñ‡ÐµÑ€ÐµÐ´Ð½Ð¾Ð³Ð¾ Ð¿Ð°ÐºÐµÑ‚Ð°
    sem_post(&pc->canWrite);
    return;
 }
 
 Packet* pcStartWritePacket(PacketContainer* pc) {
    
-   //×ÙÄÅÌÑÅÍ Ó×ÏÂÏÄÎÕÀ ÄÌÑ ÚÁÐÉÓÉ ÏÂÌÁÓÔØ ÐÁÍÑÔÉ
-   //ÉÌÉ ÎÁÐÒÁ×ÌÑÅÍ × ÍÕÓÏÒÎÕÀ ËÏÒÚÉÎÕ
+   //Ð²Ñ‹Ð´ÐµÐ»ÑÐµÐ¼ ÑÐ²Ð¾Ð±Ð¾Ð´Ð½ÑƒÑŽ Ð´Ð»Ñ Ð·Ð°Ð¿Ð¸ÑÐ¸ Ð¾Ð±Ð»Ð°ÑÑ‚ÑŒ Ð¿Ð°Ð¼ÑÑ‚Ð¸
+   //Ð¸Ð»Ð¸ Ð½Ð°Ð¿Ñ€Ð°Ð²Ð»ÑÐµÐ¼ Ð² Ð¼ÑƒÑÐ¾Ñ€Ð½ÑƒÑŽ ÐºÐ¾Ñ€Ð·Ð¸Ð½Ñƒ
    pc->toTrash =  sem_trywait(&pc->canWrite) == -1;
    if ( pc->toTrash )
       return &pc->trashPacket;
    
    Packet* ret = pc->data + pc->writeIndex;
-   //ÐÅÒÅËÌÀÞÉÔØ ÂÕÆÅÒ
+   //Ð¿ÐµÑ€ÐµÐºÐ»ÑŽÑ‡Ð¸Ñ‚ÑŒ Ð±ÑƒÑ„ÐµÑ€
    pc->writeIndex++;
    if ( pc->writeIndex == PacketContainer::BufferSize )
       pc->writeIndex = 0;
@@ -55,7 +55,7 @@ Packet* pcStartWritePacket(PacketContainer* pc) {
 
 void pcFinishWritePacket(PacketContainer* pc) {
    
-   //ÐÁËÅÔ ÇÏÔÏ×
+   //Ð¿Ð°ÐºÐµÑ‚ Ð³Ð¾Ñ‚Ð¾Ð²
    if ( !pc->toTrash )
       sem_post(&pc->canRead);
 

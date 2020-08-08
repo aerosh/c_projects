@@ -28,17 +28,17 @@ int consumerAppRun(ConsumerApp& app) {
 
 static void consumerAppOutPacket(ConsumerApp& app, Packet& packet) {
    
-   //обнаружение информации о плохом пакете
+   //п╬п╠п╫п╟я─я┐п╤п╣п╫п╦п╣ п╦п╫я└п╬я─п╪п╟я├п╦п╦ п╬ п©п╩п╬я┘п╬п╪ п©п╟п╨п╣я┌п╣
    if ( packet.header.message == MESSAGE_BADPACKET ) {
       cout << "bad packet" << endl;
       return;
    }
-   //обнаружение информации о состоянии приемных каналов 
+   //п╬п╠п╫п╟я─я┐п╤п╣п╫п╦п╣ п╦п╫я└п╬я─п╪п╟я├п╦п╦ п╬ я│п╬я│я┌п╬я▐п╫п╦п╦ п©я─п╦п╣п╪п╫я▀я┘ п╨п╟п╫п╟п╩п╬п╡ 
    if ( packet.header.message == MESSAGE_INPUTDIAG ) {
       cout << "input diag packet" << endl;
       return;
    }
-   //обнаружение информации о диагностике узла 
+   //п╬п╠п╫п╟я─я┐п╤п╣п╫п╦п╣ п╦п╫я└п╬я─п╪п╟я├п╦п╦ п╬ п╢п╦п╟пЁп╫п╬я│я┌п╦п╨п╣ я┐п╥п╩п╟ 
    if ( packet.header.message == MESSAGE_NODEDIAG ) {
       DiagPacketBody* body = (DiagPacketBody*) packet.body;
       cout << "node: " << packet.header.source << ' ' <<
@@ -46,7 +46,7 @@ static void consumerAppOutPacket(ConsumerApp& app, Packet& packet) {
       return;
    }
    
-   //обработка только пакета с результатами
+   //п╬п╠я─п╟п╠п╬я┌п╨п╟ я┌п╬п╩я▄п╨п╬ п©п╟п╨п╣я┌п╟ я│ я─п╣п╥я┐п╩я▄я┌п╟я┌п╟п╪п╦
    if ( packet.header.message != MESSAGE_OUTPUTPACKET )
       return;
    

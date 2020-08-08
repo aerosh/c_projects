@@ -1,7 +1,7 @@
 #ifndef nodes_h
 #define nodes_h
 
-//имена узлов
+//п╦п╪п╣п╫п╟ я┐п╥п╩п╬п╡
 #define NODE_IMITATOR 1
 #define NODE_PROCESSING 2
 #define NODE_CONSUMER 3

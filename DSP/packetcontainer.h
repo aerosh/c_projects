@@ -14,7 +14,7 @@ struct PacketContainer
 	unsigned readIndex;
 	unsigned writeIndex;
 	Packet trashPacket;
-	bool toTrash; //идет запись в мусорную корзину
+	bool toTrash; //п╦п╢п╣я┌ п╥п╟п©п╦я│я▄ п╡ п╪я┐я│п╬я─п╫я┐я▌ п╨п╬я─п╥п╦п╫я┐
 };
 
 void pcInit(PacketContainer* oc);

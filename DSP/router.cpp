@@ -11,13 +11,13 @@ void routerInit(Router& router, unsigned node, PacketContainer* oc)
 
 bool routerAction(Router& router, Packet* packet)
 {
-   //ÐÒÏ×ÅÒËÁ ÓÏ×ÐÁÄÅÎÉÑ ÐÏÌÕÞÁÔÅÌÑ ÐÁËÅÔÁ Ó ÉÍÅÎÅÍ ÕÚÌÁ
+   //Ð¿Ñ€Ð¾Ð²ÐµÑ€ÐºÐ° ÑÐ¾Ð²Ð¿Ð°Ð´ÐµÐ½Ð¸Ñ Ð¿Ð¾Ð»ÑƒÑ‡Ð°Ñ‚ÐµÐ»Ñ Ð¿Ð°ÐºÐµÑ‚Ð° Ñ Ð¸Ð¼ÐµÐ½ÐµÐ¼ ÑƒÐ·Ð»Ð°
    if ( packet->header.destination == router.nodeName )
       return true;
 
-   //ÎÅ ÓÏ×ÐÁÄÁÀÔ => ÐÅÒÅÎÁÐÒÁ×ÉÔØ ÄÁÌØÛÅ ÐÏ ËÏÎ×ÅÊÅÒÕ
+   //Ð½Ðµ ÑÐ¾Ð²Ð¿Ð°Ð´Ð°ÑŽÑ‚ => Ð¿ÐµÑ€ÐµÐ½Ð°Ð¿Ñ€Ð°Ð²Ð¸Ñ‚ÑŒ Ð´Ð°Ð»ÑŒÑˆÐµ Ð¿Ð¾ ÐºÐ¾Ð½Ð²ÐµÐ¹ÐµÑ€Ñƒ
    Packet* output = pcStartWritePacket(router.oc);
-   //ËÏÐÉÒÏ×ÁÎÉÅ ÐÁËÅÔÁ 
+   //ÐºÐ¾Ð¿Ð¸Ñ€Ð¾Ð²Ð°Ð½Ð¸Ðµ Ð¿Ð°ÐºÐµÑ‚Ð° 
    unsigned size = packet->header.size + sizeof(packet->header) + sizeof(unsigned);
    memcpy(output,packet,size);
    pcFinishWritePacket(router.oc);
