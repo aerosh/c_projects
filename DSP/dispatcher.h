@@ -5,7 +5,7 @@
 
 #define DISP_MSGMAXCNT 256
 
-//packet - РІС…РѕРґРЅРѕР№ РїР°РєРµС‚
+//packet - входной пакет
 typedef void (*PacketHandler)(Packet* packet, void* clientData);
 
 struct Dispatcher
@@ -17,11 +17,11 @@ struct Dispatcher
    HandlerDescription table[DISP_MSGMAXCNT];
 };
 
-//РёРЅРёС†РёР°Р»РёР·Р°С†РёСЏ РґРёСЃРїРµС‚С‡РµСЂР°
+//инициализация диспетчера
 void dispInit(Dispatcher& disp);
-//РґРѕР±Р°РІРёС‚СЊ РѕР±СЂР°Р±РѕС‚С‡РёРє СЃРѕРѕР±С‰РµРЅРёСЏ СѓРєР°Р·Р°РЅРЅРѕРіРѕ С‚РёРїР°
+//добавить обработчик сообщения указанного типа
 void dispAddHandler(Dispatcher& disp, unsigned id, PacketHandler handler, void* clientData);
-//РІС‹РїРѕР»РЅРёС‚СЊ РѕР±СЂР°Р±РѕС‚РєСѓ СЃРѕРѕР±С‰РµРЅРёСЏ СѓРєР°Р·Р°РЅРЅРѕРіРѕ С‚РёРїР°
+//выполнить обработку сообщения указанного типа
 int dispProcess(Dispatcher& disp, Packet* packet);
 
 #endif
