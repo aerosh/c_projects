@@ -1,5 +1,5 @@
 # c_projects
-My C / C++ projects to demonstrate with a resume
+My C / C++ portfolio
 
 I completed these projects while studying at the University.
 
